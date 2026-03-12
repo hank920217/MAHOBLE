@@ -27,6 +27,31 @@ export function ModalProvider({ children }) {
     })
   }
 
+  function updateActiveModalOptions(nextOptions) {
+    setModalQueue((currentQueue) => {
+      if (currentQueue.length === 0) {
+        return currentQueue
+      }
+
+      const [activeModal, ...restQueue] = currentQueue
+      const updatedOptions =
+        typeof nextOptions === 'function'
+          ? nextOptions(activeModal.options)
+          : {
+              ...activeModal.options,
+              ...nextOptions,
+            }
+
+      return [
+        {
+          ...activeModal,
+          options: updatedOptions,
+        },
+        ...restQueue,
+      ]
+    })
+  }
+
   return (
     <ModalContext.Provider
       value={{
@@ -35,6 +60,7 @@ export function ModalProvider({ children }) {
         openConfirm: (options) => enqueueModal('confirm', options),
         openInput: (options) => enqueueModal('input', options),
         closeModal: resolveActiveModal,
+        updateActiveModal: updateActiveModalOptions,
       }}
     >
       {children}

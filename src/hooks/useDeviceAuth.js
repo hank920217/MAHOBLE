@@ -9,7 +9,7 @@ import { validateVerificationCode } from '../utils/validators.js'
 function useDeviceAuth() {
   const { devices, subscribeToNotifications, updateDevice, writeToDevice } = useBluetooth()
   const { addLog } = useLogs()
-  const { openAlert, openInput } = useModal()
+  const { closeModal, openInput, updateActiveModal } = useModal()
   const pendingRequestsRef = useRef(new Map())
 
   useEffect(() => {
@@ -41,23 +41,21 @@ function useDeviceAuth() {
 
       if (authenticated) {
         addLog('驗證成功', payload.deviceName)
-        openAlert({
-          title: '驗證成功',
-          message: `${payload.deviceName} 已完成驗證。`,
+        closeModal({
+          success: true,
+          status: payload.message,
         })
       } else {
         addLog('驗證失敗', payload.deviceName)
-        openAlert({
-          title: payload.message === AUTH_RESPONSES.REQUIRED ? '需重新驗證' : '驗證失敗',
-          message: `${payload.deviceName} 尚未通過驗證，請重新輸入驗證碼。`,
+        updateActiveModal({
+          errorMessage: '驗證碼錯誤，請重新輸入',
+          isSubmitting: false,
         })
       }
-
-      pendingRequest.resolve({ success: authenticated, status: payload.message })
     })
 
     return unsubscribe
-  }, [addLog, openAlert, subscribeToNotifications, updateDevice])
+  }, [addLog, closeModal, subscribeToNotifications, updateActiveModal, updateDevice])
 
   async function requestAuthentication(deviceId) {
     const deviceRecord = devices.find((device) => device.id === deviceId)
@@ -65,14 +63,81 @@ function useDeviceAuth() {
       return { success: false, status: 'DEVICE_MISSING' }
     }
 
-    const code = await openInput({
+    async function handleSubmit(code) {
+      const trimmedCode = code.trim()
+
+      if (!validateVerificationCode(trimmedCode)) {
+        updateActiveModal({
+          errorMessage: '請輸入驗證碼',
+          isSubmitting: false,
+        })
+        return
+      }
+
+      if (pendingRequestsRef.current.has(deviceId)) {
+        return
+      }
+
+      updateDevice(deviceId, {
+        authenticated: false,
+        lastAuthStatus: AUTH_RESPONSES.PENDING,
+      })
+      updateActiveModal({
+        errorMessage: '',
+        isSubmitting: true,
+      })
+
+      addLog(`送出驗證碼 ${createAuthMessage(trimmedCode)}`, deviceRecord.name)
+
+      const timeoutId = window.setTimeout(() => {
+        pendingRequestsRef.current.delete(deviceId)
+        updateDevice(deviceId, {
+          authenticated: false,
+          lastAuthStatus: AUTH_RESPONSES.TIMEOUT,
+        })
+        addLog('驗證逾時', deviceRecord.name)
+        updateActiveModal({
+          errorMessage: '驗證逾時，請重新輸入',
+          isSubmitting: false,
+        })
+      }, AUTH_TIMEOUT_MS)
+
+      pendingRequestsRef.current.set(deviceId, { timeoutId })
+
+      try {
+        await writeToDevice(deviceId, createAuthMessage(trimmedCode))
+      } catch (error) {
+        clearTimeout(timeoutId)
+        pendingRequestsRef.current.delete(deviceId)
+        updateDevice(deviceId, {
+          authenticated: false,
+          lastAuthStatus: AUTH_RESPONSES.FAIL,
+        })
+        addLog('送出驗證失敗', deviceRecord.name)
+        updateActiveModal({
+          errorMessage: error instanceof Error ? error.message : '無法送出驗證碼。',
+          isSubmitting: false,
+        })
+      }
+    }
+
+    const result = await openInput({
       title: `驗證 ${deviceRecord.name}`,
       message: '請輸入這台裝置的驗證碼。',
       placeholder: '例如：1234',
       confirmText: '確定',
+      errorMessage: '',
+      isSubmitting: false,
+      onSubmit: handleSubmit,
     })
 
-    if (code === null) {
+    const pendingRequest = pendingRequestsRef.current.get(deviceId)
+    if (pendingRequest) {
+      clearTimeout(pendingRequest.timeoutId)
+      pendingRequestsRef.current.delete(deviceId)
+    }
+
+    if (result === null) {
       updateDevice(deviceId, {
         authenticated: false,
         lastAuthStatus: AUTH_RESPONSES.CANCELLED,
@@ -81,53 +146,7 @@ function useDeviceAuth() {
       return { success: false, status: AUTH_RESPONSES.CANCELLED }
     }
 
-    if (!validateVerificationCode(code)) {
-      await openAlert({
-        title: '驗證碼不可為空',
-        message: '請重新輸入有效的驗證碼。',
-      })
-      return requestAuthentication(deviceId)
-    }
-
-    updateDevice(deviceId, {
-      authenticated: false,
-      lastAuthStatus: AUTH_RESPONSES.PENDING,
-    })
-
-    addLog(`送出驗證碼 ${createAuthMessage(code)}`, deviceRecord.name)
-
-    return new Promise((resolve) => {
-      const timeoutId = window.setTimeout(async () => {
-        pendingRequestsRef.current.delete(deviceId)
-        updateDevice(deviceId, {
-          authenticated: false,
-          lastAuthStatus: AUTH_RESPONSES.TIMEOUT,
-        })
-        addLog('驗證逾時', deviceRecord.name)
-        await openAlert({
-          title: '驗證逾時',
-          message: `${deviceRecord.name} 在 5 秒內沒有回應，請重新驗證。`,
-        })
-        resolve({ success: false, status: AUTH_RESPONSES.TIMEOUT })
-      }, AUTH_TIMEOUT_MS)
-
-      pendingRequestsRef.current.set(deviceId, { resolve, timeoutId })
-
-      writeToDevice(deviceId, createAuthMessage(code)).catch(async (error) => {
-        clearTimeout(timeoutId)
-        pendingRequestsRef.current.delete(deviceId)
-        updateDevice(deviceId, {
-          authenticated: false,
-          lastAuthStatus: AUTH_RESPONSES.FAIL,
-        })
-        addLog('送出驗證失敗', deviceRecord.name)
-        await openAlert({
-          title: '送出失敗',
-          message: error instanceof Error ? error.message : '無法送出驗證碼。',
-        })
-        resolve({ success: false, status: AUTH_RESPONSES.FAIL })
-      })
-    })
+    return result
   }
 
   return { requestAuthentication }
