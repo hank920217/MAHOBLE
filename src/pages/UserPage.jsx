@@ -28,7 +28,7 @@ function UserPage() {
       const device = await bluetooth.connectDevice(APP_MODES.USER)
 
       if (device) {
-        await requestAuthentication(device.id)
+        await requestAuthentication(device)
       }
     } catch (error) {
       await openAlert({

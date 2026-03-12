@@ -57,8 +57,12 @@ function useDeviceAuth() {
     return unsubscribe
   }, [addLog, closeModal, subscribeToNotifications, updateActiveModal, updateDevice])
 
-  async function requestAuthentication(deviceId) {
-    const deviceRecord = devices.find((device) => device.id === deviceId)
+  async function requestAuthentication(deviceOrId) {
+    const deviceId = typeof deviceOrId === 'string' ? deviceOrId : deviceOrId?.id
+    const connectedDevice =
+      typeof deviceOrId === 'object' && deviceOrId !== null ? deviceOrId : null
+    const deviceRecord = devices.find((device) => device.id === deviceId) ?? connectedDevice
+
     if (!deviceRecord) {
       return { success: false, status: 'DEVICE_MISSING' }
     }
