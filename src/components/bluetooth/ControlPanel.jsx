@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { COMMAND_LEVELS } from '../../utils/constants.js'
+import { useState } from "react";
+import { COMMAND_LEVELS } from "../../utils/constants.js";
 
 function ControlPanel({
   batchResult,
@@ -9,16 +9,16 @@ function ControlPanel({
   onSendCommand,
   onSendMessage,
 }) {
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState("");
 
   async function handleSendMessage() {
     if (!message.trim()) {
-      return
+      return;
     }
 
-    const success = await onSendMessage(message)
+    const success = await onSendMessage(message);
     if (success) {
-      setMessage('')
+      setMessage("");
     }
   }
 
@@ -61,24 +61,29 @@ function ControlPanel({
             onClick={() => onSendCommand(level)}
             type="button"
           >
-            發送 {level}
+            閃{level}次
           </button>
         ))}
       </div>
 
       <div className="panel__footer">
-        <button className="button button--ghost" onClick={onDisconnectAll} type="button">
+        <button
+          className="button button--ghost"
+          onClick={onDisconnectAll}
+          type="button"
+        >
           中斷所有連線
         </button>
 
         {batchResult && (
           <p className="batch-result">
-            成功 {batchResult.successCount} 台，失敗 {batchResult.failureCount} 台
+            成功 {batchResult.successCount} 台，失敗 {batchResult.failureCount}{" "}
+            台
           </p>
         )}
       </div>
     </section>
-  )
+  );
 }
 
-export default ControlPanel
+export default ControlPanel;
