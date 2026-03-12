@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState } from "react";
 
 function InputModal({
-  confirmText = '確定',
+  confirmText = "確定",
   message,
   onCancel,
   onClose,
@@ -9,11 +9,11 @@ function InputModal({
   placeholder,
   title,
 }) {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState("");
 
   function handleSubmit(event) {
-    event.preventDefault()
-    onConfirm(value)
+    event.preventDefault();
+    onConfirm(value);
   }
 
   return (
@@ -49,16 +49,23 @@ function InputModal({
         </label>
 
         <div className="modal-actions">
-          <button className="button button--ghost" onClick={() => onCancel(null)} type="button">
+          <button
+            className="button button--ghost"
+            onClick={() => onCancel(null)}
+            type="button"
+          >
             取消
           </button>
-          <button className="button button--primary button--modal-primary" type="submit">
-            {confirmText}
+          <button
+            className="button button--primary button--modal-primary"
+            type="submit"
+          >
+            確認
           </button>
         </div>
       </form>
     </div>
-  )
+  );
 }
 
-export default InputModal
+export default InputModal;
