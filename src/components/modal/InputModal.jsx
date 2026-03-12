@@ -4,7 +4,6 @@ function InputModal({
   confirmText = "確定",
   message,
   onCancel,
-  onClose,
   onConfirm,
   placeholder,
   title,
@@ -26,14 +25,6 @@ function InputModal({
     >
       <div className="modal-header">
         <h2 id="modal-title">{title}</h2>
-        <button
-          aria-label="Close dialog"
-          className="modal-close"
-          onClick={onClose}
-          type="button"
-        >
-          關閉
-        </button>
       </div>
       <p>{message}</p>
 
@@ -60,7 +51,7 @@ function InputModal({
             className="button button--primary button--modal-primary"
             type="submit"
           >
-            確認
+            {confirmText}
           </button>
         </div>
       </form>

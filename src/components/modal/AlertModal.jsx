@@ -1,4 +1,4 @@
-function AlertModal({ message, title, onClose, onConfirm }) {
+function AlertModal({ message, title, onConfirm }) {
   return (
     <div
       aria-labelledby="modal-title"
@@ -9,14 +9,6 @@ function AlertModal({ message, title, onClose, onConfirm }) {
     >
       <div className="modal-header">
         <h2 id="modal-title">{title}</h2>
-        <button
-          aria-label="Close dialog"
-          className="modal-close"
-          onClick={onClose}
-          type="button"
-        >
-          關閉
-        </button>
       </div>
       <p>{message}</p>
       <div className="modal-actions">

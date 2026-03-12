@@ -36,7 +36,7 @@ function ModalRoot() {
   let content = null
 
   if (activeModal.type === 'alert') {
-    content = <AlertModal {...activeModal.options} onClose={handleDismiss} onConfirm={closeModal} />
+    content = <AlertModal {...activeModal.options} onConfirm={closeModal} />
   }
 
   if (activeModal.type === 'confirm') {
@@ -44,7 +44,6 @@ function ModalRoot() {
       <ConfirmModal
         {...activeModal.options}
         onCancel={closeModal}
-        onClose={handleDismiss}
         onConfirm={closeModal}
       />
     )
@@ -55,7 +54,6 @@ function ModalRoot() {
       <InputModal
         {...activeModal.options}
         onCancel={closeModal}
-        onClose={handleDismiss}
         onConfirm={closeModal}
       />
     )

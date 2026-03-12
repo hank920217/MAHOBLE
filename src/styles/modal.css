@@ -23,8 +23,6 @@
 .modal-header {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
 }
 
 .modal-card h2 {
@@ -40,19 +38,6 @@
   display: grid;
   gap: 1rem;
   margin-top: 1rem;
-}
-
-.modal-close {
-  border: 0;
-  padding: 0;
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-  font: inherit;
-}
-
-.modal-close:hover {
-  color: #0f172a;
 }
 
 .modal-actions {
@@ -87,7 +72,6 @@
     align-items: stretch;
   }
 
-  .modal-close,
   .modal-actions .button {
     width: 100%;
     text-align: center;
