@@ -7,7 +7,7 @@ export function createTextMessage(message) {
 }
 
 export function createCommandMessage(level) {
-  return `CMD:FLASH:${level}`
+  return `${level}`
 }
 
 export function normalizeIncomingMessage(message) {

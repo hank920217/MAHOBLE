@@ -203,7 +203,7 @@ body {
 
 .button--primary {
   background: var(--accent);
-  color: #ca2d2d;
+  color: #000000;
 }
 
 .button--secondary {

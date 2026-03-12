@@ -7,6 +7,8 @@ function Header({ mode, title, subtitle }) {
   const location = useLocation()
   const navigate = useNavigate()
   const isAdminRoute = location.pathname === '/admin'
+  const isAdminLoginRoute = location.pathname === '/admin-login'
+  const showBackToUserButton = isAdminRoute || isAdminLoginRoute
 
   function handleLogout() {
     signOut()
@@ -22,13 +24,13 @@ function Header({ mode, title, subtitle }) {
       </div>
 
       <div className="topbar__actions">
-        {!isAdminRoute && (
+        {!showBackToUserButton && (
           <Link className="button button--ghost button--mobile-tight" to="/admin-login">
             管理者登入
           </Link>
         )}
 
-        {isAdminRoute && (
+        {showBackToUserButton && (
           <Link className="button button--ghost button--mobile-tight" to="/">
             返回使用者模式
           </Link>

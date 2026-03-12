@@ -15,7 +15,7 @@ describe('messageService', () => {
         { id: '2', name: 'maho-02' },
         { id: '3', name: 'maho-03' },
       ],
-      'CMD:FLASH:1',
+      '1',
       writer,
     )
 

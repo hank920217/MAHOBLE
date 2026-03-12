@@ -61,7 +61,7 @@ function ControlPanel({
             onClick={() => onSendCommand(level)}
             type="button"
           >
-            發送 CMD:FLASH:{level}
+            發送 {level}
           </button>
         ))}
       </div>
