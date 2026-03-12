@@ -13,6 +13,7 @@
 }
 
 .modal-card {
+  position: relative;
   background: #fff;
   border-radius: 24px;
   padding: 1.5rem;
@@ -61,6 +62,14 @@
   margin-top: 1rem;
 }
 
+.button--modal-primary {
+  position: relative;
+  z-index: 1;
+  box-shadow:
+    0 14px 30px rgba(15, 23, 42, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
 @media (max-width: 480px) {
   .modal-overlay {
     padding: 0.75rem;
@@ -82,5 +91,9 @@
   .modal-actions .button {
     width: 100%;
     text-align: center;
+  }
+
+  .button--modal-primary {
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.16);
   }
 }

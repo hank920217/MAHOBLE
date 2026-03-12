@@ -20,8 +20,12 @@ function AlertModal({ message, title, onClose, onConfirm }) {
       </div>
       <p>{message}</p>
       <div className="modal-actions">
-        <button className="button button--primary" onClick={() => onConfirm(true)} type="button">
-          蝣箏?
+        <button
+          className="button button--primary button--modal-primary"
+          onClick={() => onConfirm(true)}
+          type="button"
+        >
+          確定
         </button>
       </div>
     </div>

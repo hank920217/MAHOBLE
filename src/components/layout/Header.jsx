@@ -23,19 +23,19 @@ function Header({ mode, title, subtitle }) {
 
       <div className="topbar__actions">
         {!isAdminRoute && (
-          <Link className="button button--ghost" to="/admin-login">
+          <Link className="button button--ghost button--mobile-tight" to="/admin-login">
             管理者登入
           </Link>
         )}
 
         {isAdminRoute && (
-          <Link className="button button--ghost" to="/">
+          <Link className="button button--ghost button--mobile-tight" to="/">
             返回使用者模式
           </Link>
         )}
 
         {isAuthenticated && isAdminRoute && (
-          <button className="button button--danger" onClick={handleLogout} type="button">
+          <button className="button button--danger button--mobile-tight" onClick={handleLogout} type="button">
             登出
           </button>
         )}

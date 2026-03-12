@@ -21,10 +21,14 @@ function ConfirmModal({ message, title, onCancel, onClose, onConfirm }) {
       <p>{message}</p>
       <div className="modal-actions">
         <button className="button button--ghost" onClick={() => onCancel(false)} type="button">
-          ??
+          取消
         </button>
-        <button className="button button--primary" onClick={() => onConfirm(true)} type="button">
-          蝣箄?
+        <button
+          className="button button--primary button--modal-primary"
+          onClick={() => onConfirm(true)}
+          type="button"
+        >
+          確定
         </button>
       </div>
     </div>

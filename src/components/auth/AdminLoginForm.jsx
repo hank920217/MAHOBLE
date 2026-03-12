@@ -34,7 +34,7 @@ function AdminLoginForm({ errorMessage, onSubmit }) {
 
       {errorMessage && <p className="form-error">{errorMessage}</p>}
 
-      <button className="button button--primary" type="submit">
+      <button className="button button--primary button--mobile-tight" type="submit">
         登入管理者模式
       </button>
     </form>

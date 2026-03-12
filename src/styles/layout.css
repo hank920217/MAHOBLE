@@ -221,6 +221,10 @@ body {
   color: #fff;
 }
 
+.button--mobile-tight {
+  padding-inline: 1.05rem;
+}
+
 .field {
   display: grid;
   gap: 0.5rem;
@@ -401,6 +405,11 @@ body {
   .panel__footer > * {
     width: 100%;
     text-align: center;
+  }
+
+  .button--mobile-tight {
+    min-height: 42px;
+    padding: 0.7rem 0.95rem;
   }
 }
 

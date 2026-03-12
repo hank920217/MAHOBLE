@@ -1,7 +1,7 @@
 function ConnectButton({ disabled, loading, onConnect }) {
   return (
     <button
-      className="button button--primary"
+      className="button button--primary button--mobile-tight"
       disabled={disabled || loading}
       onClick={onConnect}
       type="button"

@@ -39,7 +39,7 @@ function InputModal({
 
       <form className="modal-form" onSubmit={handleSubmit}>
         <label className="field">
-          <span>頛詨?批捆</span>
+          <span>驗證碼</span>
           <input
             autoFocus
             onChange={(event) => setValue(event.target.value)}
@@ -50,9 +50,9 @@ function InputModal({
 
         <div className="modal-actions">
           <button className="button button--ghost" onClick={() => onCancel(null)} type="button">
-            ??
+            取消
           </button>
-          <button className="button button--primary" type="submit">
+          <button className="button button--primary button--modal-primary" type="submit">
             {confirmText}
           </button>
         </div>
