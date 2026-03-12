@@ -69,7 +69,7 @@ function useDeviceAuth() {
       title: `驗證 ${deviceRecord.name}`,
       message: '請輸入這台裝置的驗證碼。',
       placeholder: '例如：1234',
-      confirmText: '送出驗證',
+      confirmText: '確定',
     })
 
     if (code === null) {

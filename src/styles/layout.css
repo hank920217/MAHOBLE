@@ -184,6 +184,7 @@ body {
   border: 0;
   border-radius: 999px;
   padding: 0.85rem 1.15rem;
+  min-height: 48px;
   cursor: pointer;
   transition:
     transform 0.18s ease,
@@ -324,6 +325,25 @@ body {
   .page-frame {
     width: min(100% - 1rem, 100%);
     padding-top: 1rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .background-orb--one {
+    top: -6rem;
+    left: -5rem;
+    width: 14rem;
+    height: 14rem;
+  }
+
+  .background-orb--two {
+    right: -6rem;
+    top: 12rem;
+    width: 16rem;
+    height: 16rem;
+  }
+
+  .topbar {
+    gap: 1rem;
   }
 
   .topbar,
@@ -338,6 +358,39 @@ body {
     align-items: stretch;
   }
 
+  .hero-card,
+  .panel,
+  .status-panel {
+    padding: 1rem;
+  }
+
+  .hero-card > * {
+    width: 100%;
+  }
+
+  .hero-card .button,
+  .message-box .button {
+    width: 100%;
+  }
+
+  .status-grid,
+  .quick-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .device-item__select {
+    grid-auto-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .device-item,
+  .log-item {
+    padding: 0.9rem;
+  }
+
   .topbar__actions,
   .device-item__actions {
     justify-content: stretch;
@@ -348,5 +401,30 @@ body {
   .panel__footer > * {
     width: 100%;
     text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-frame {
+    width: calc(100% - 0.75rem);
+    padding-top: 0.75rem;
+  }
+
+  .topbar h1 {
+    font-size: clamp(1.65rem, 10vw, 2.2rem);
+  }
+
+  .content-grid,
+  .stack,
+  .message-box,
+  .future-grid,
+  .device-list,
+  .log-list {
+    gap: 0.85rem;
+  }
+
+  .field input,
+  .field textarea {
+    padding: 0.8rem 0.9rem;
   }
 }

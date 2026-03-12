@@ -1,37 +1,62 @@
 import { useState } from 'react'
 
 function InputModal({
-  confirmText = '確認',
+  confirmText = '確定',
   message,
   onCancel,
+  onClose,
   onConfirm,
   placeholder,
   title,
 }) {
   const [value, setValue] = useState('')
 
+  function handleSubmit(event) {
+    event.preventDefault()
+    onConfirm(value)
+  }
+
   return (
-    <div className="modal-card">
-      <h2>{title}</h2>
-      <p>{message}</p>
-
-      <label className="field">
-        <span>輸入內容</span>
-        <input
-          onChange={(event) => setValue(event.target.value)}
-          placeholder={placeholder}
-          value={value}
-        />
-      </label>
-
-      <div className="modal-actions">
-        <button className="button button--ghost" onClick={() => onCancel(null)} type="button">
-          取消
-        </button>
-        <button className="button button--primary" onClick={() => onConfirm(value)} type="button">
-          {confirmText}
+    <div
+      aria-labelledby="modal-title"
+      aria-modal="true"
+      className="modal-card"
+      onClick={(event) => event.stopPropagation()}
+      role="dialog"
+    >
+      <div className="modal-header">
+        <h2 id="modal-title">{title}</h2>
+        <button
+          aria-label="Close dialog"
+          className="modal-close"
+          onClick={onClose}
+          type="button"
+        >
+          關閉
         </button>
       </div>
+      <p>{message}</p>
+
+      <form className="modal-form" onSubmit={handleSubmit}>
+        <label className="field">
+          <span>頛詨?批捆</span>
+          <input
+            autoFocus
+            onChange={(event) => setValue(event.target.value)}
+            placeholder={placeholder}
+            value={value}
+          />
+        </label>
+
+        <div className="modal-actions">
+          <button className="button button--ghost" onClick={() => onCancel(null)} type="button">
+            ??
+          </button>
+          <button className="button button--primary" type="submit">
+            {confirmText}
+          </button>
+        </div>
+      </form>
     </div>
   )
 }
