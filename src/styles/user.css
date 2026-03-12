@@ -1,0 +1,6 @@
+.app-shell--user .panel,
+.app-shell--user .hero-card {
+  box-shadow:
+    0 26px 60px rgba(15, 118, 110, 0.08),
+    0 4px 18px rgba(15, 23, 42, 0.05);
+}

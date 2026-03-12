@@ -1,0 +1,10 @@
+.app-shell--admin .panel,
+.app-shell--admin .hero-card {
+  box-shadow:
+    0 26px 60px rgba(180, 83, 9, 0.08),
+    0 4px 18px rgba(15, 23, 42, 0.05);
+}
+
+.admin-extension-panel .chip {
+  background: rgba(180, 83, 9, 0.08);
+}
