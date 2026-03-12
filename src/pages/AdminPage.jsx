@@ -1,64 +1,64 @@
-import { useEffect, useState } from 'react'
-import ConnectButton from '../components/bluetooth/ConnectButton.jsx'
-import ControlPanel from '../components/bluetooth/ControlPanel.jsx'
-import DeviceList from '../components/bluetooth/DeviceList.jsx'
-import PageLayout from '../components/layout/PageLayout.jsx'
-import StatusBar from '../components/layout/StatusBar.jsx'
-import LogPanel from '../components/log/LogPanel.jsx'
-import useBluetooth from '../hooks/useBluetooth.js'
-import useLogs from '../hooks/useLogs.js'
-import useModal from '../hooks/useModal.js'
-import { APP_MODES } from '../utils/constants.js'
-import { formatRoleMode } from '../utils/formatters.js'
+import { useEffect, useState } from "react";
+import ConnectButton from "../components/bluetooth/ConnectButton.jsx";
+import ControlPanel from "../components/bluetooth/ControlPanel.jsx";
+import DeviceList from "../components/bluetooth/DeviceList.jsx";
+import PageLayout from "../components/layout/PageLayout.jsx";
+import StatusBar from "../components/layout/StatusBar.jsx";
+import LogPanel from "../components/log/LogPanel.jsx";
+import useBluetooth from "../hooks/useBluetooth.js";
+import useLogs from "../hooks/useLogs.js";
+import useModal from "../hooks/useModal.js";
+import { APP_MODES } from "../utils/constants.js";
+import { formatRoleMode } from "../utils/formatters.js";
 
 function AdminPage() {
-  const [isSending, setIsSending] = useState(false)
-  const bluetooth = useBluetooth()
-  const { logs, clearLogs } = useLogs()
-  const { openAlert } = useModal()
+  const [isSending, setIsSending] = useState(false);
+  const bluetooth = useBluetooth();
+  const { logs, clearLogs } = useLogs();
+  const { openAlert } = useModal();
 
   useEffect(() => {
-    bluetooth.setMode(APP_MODES.ADMIN)
-  }, [bluetooth])
+    bluetooth.setMode(APP_MODES.ADMIN);
+  }, [bluetooth]);
 
   async function handleConnect() {
     try {
-      await bluetooth.connectDevice(APP_MODES.ADMIN)
+      await bluetooth.connectDevice(APP_MODES.ADMIN);
     } catch (error) {
       await openAlert({
-        title: '連線失敗',
-        message: error instanceof Error ? error.message : '無法完成藍牙連線。',
-      })
+        title: "連線失敗",
+        message: error instanceof Error ? error.message : "無法完成藍牙連線。",
+      });
     }
   }
 
   async function handleSendMessage(message) {
     try {
-      setIsSending(true)
-      await bluetooth.sendTextMessage(message)
-      return true
+      setIsSending(true);
+      await bluetooth.sendTextMessage(message);
+      return true;
     } catch (error) {
       await openAlert({
-        title: '發送失敗',
-        message: error instanceof Error ? error.message : '訊息發送失敗。',
-      })
-      return false
+        title: "發送失敗",
+        message: error instanceof Error ? error.message : "訊息發送失敗。",
+      });
+      return false;
     } finally {
-      setIsSending(false)
+      setIsSending(false);
     }
   }
 
   async function handleSendCommand(level) {
     try {
-      setIsSending(true)
-      await bluetooth.sendQuickCommand(level)
+      setIsSending(true);
+      await bluetooth.sendQuickCommand(level);
     } catch (error) {
       await openAlert({
-        title: '發送失敗',
-        message: error instanceof Error ? error.message : '快捷命令發送失敗。',
-      })
+        title: "發送失敗",
+        message: error instanceof Error ? error.message : "快捷命令發送失敗。",
+      });
     } finally {
-      setIsSending(false)
+      setIsSending(false);
     }
   }
 
@@ -112,7 +112,7 @@ function AdminPage() {
             <div className="panel__header">
               <div>
                 <p className="eyebrow">Extensibility</p>
-                <h2>未來管理功能預留</h2>
+                <h2>未來管理功能預留(目前無實際功用)</h2>
               </div>
             </div>
 
@@ -142,7 +142,7 @@ function AdminPage() {
         <LogPanel logs={logs} onClear={clearLogs} />
       </div>
     </PageLayout>
-  )
+  );
 }
 
-export default AdminPage
+export default AdminPage;

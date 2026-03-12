@@ -1,70 +1,70 @@
-import { useEffect, useState } from 'react'
-import ConnectButton from '../components/bluetooth/ConnectButton.jsx'
-import ControlPanel from '../components/bluetooth/ControlPanel.jsx'
-import DeviceList from '../components/bluetooth/DeviceList.jsx'
-import PageLayout from '../components/layout/PageLayout.jsx'
-import StatusBar from '../components/layout/StatusBar.jsx'
-import LogPanel from '../components/log/LogPanel.jsx'
-import useBluetooth from '../hooks/useBluetooth.js'
-import useDeviceAuth from '../hooks/useDeviceAuth.js'
-import useLogs from '../hooks/useLogs.js'
-import useModal from '../hooks/useModal.js'
-import { APP_MODES } from '../utils/constants.js'
-import { formatRoleMode } from '../utils/formatters.js'
+import { useEffect, useState } from "react";
+import ConnectButton from "../components/bluetooth/ConnectButton.jsx";
+import ControlPanel from "../components/bluetooth/ControlPanel.jsx";
+import DeviceList from "../components/bluetooth/DeviceList.jsx";
+import PageLayout from "../components/layout/PageLayout.jsx";
+import StatusBar from "../components/layout/StatusBar.jsx";
+import LogPanel from "../components/log/LogPanel.jsx";
+import useBluetooth from "../hooks/useBluetooth.js";
+import useDeviceAuth from "../hooks/useDeviceAuth.js";
+import useLogs from "../hooks/useLogs.js";
+import useModal from "../hooks/useModal.js";
+import { APP_MODES } from "../utils/constants.js";
+import { formatRoleMode } from "../utils/formatters.js";
 
 function UserPage() {
-  const [isSending, setIsSending] = useState(false)
-  const bluetooth = useBluetooth()
-  const { requestAuthentication } = useDeviceAuth()
-  const { logs, clearLogs } = useLogs()
-  const { openAlert } = useModal()
+  const [isSending, setIsSending] = useState(false);
+  const bluetooth = useBluetooth();
+  const { requestAuthentication } = useDeviceAuth();
+  const { logs, clearLogs } = useLogs();
+  const { openAlert } = useModal();
 
   useEffect(() => {
-    bluetooth.setMode(APP_MODES.USER)
-  }, [bluetooth])
+    bluetooth.setMode(APP_MODES.USER);
+  }, [bluetooth]);
 
   async function handleConnect() {
     try {
-      const device = await bluetooth.connectDevice(APP_MODES.USER)
+      const device = await bluetooth.connectDevice(APP_MODES.USER);
 
       if (device) {
-        await requestAuthentication(device)
+        await requestAuthentication(device);
       }
     } catch (error) {
       await openAlert({
-        title: '連線失敗',
-        message: error instanceof Error ? error.message : '無法完成藍牙連線。',
-      })
+        title: "連線失敗",
+        message: error instanceof Error ? error.message : "無法完成藍牙連線。",
+      });
     }
   }
 
   async function handleSendMessage(message) {
     try {
-      setIsSending(true)
-      await bluetooth.sendTextMessage(message)
-      return true
+      setIsSending(true);
+      await bluetooth.sendTextMessage(message);
+      return true;
     } catch (error) {
       await openAlert({
-        title: '發送失敗',
-        message: error instanceof Error ? error.message : '訊息發送失敗。',
-      })
-      return false
+        title: "發送失敗",
+        message: error instanceof Error ? error.message : "訊息發送失敗。",
+      });
+      return false;
     } finally {
-      setIsSending(false)
+      setIsSending(false);
     }
   }
 
   async function handleSendCommand(level) {
     try {
-      setIsSending(true)
-      await bluetooth.sendQuickCommand(level)
+      setIsSending(true);
+      await bluetooth.sendQuickCommand(level);
     } catch (error) {
       await openAlert({
-        title: '發送失敗',
-        message: error instanceof Error ? error.message : '快捷命令發送失敗。',
-      })
+        title: "發送失敗",
+        message: error instanceof Error ? error.message : "快捷命令發送失敗。",
+      });
     } finally {
-      setIsSending(false)
+      setIsSending(false);
     }
   }
 
@@ -72,7 +72,7 @@ function UserPage() {
     <PageLayout
       mode={APP_MODES.USER}
       subtitle="首頁預設為使用者模式，所有裝置都驗證成功後才會開放控制。"
-      title="ESP32 Web Bluetooth 控制系統"
+      title="MAHOTOON"
     >
       <div className="hero-card">
         <div>
@@ -119,7 +119,7 @@ function UserPage() {
         <LogPanel logs={logs} onClear={clearLogs} />
       </div>
     </PageLayout>
-  )
+  );
 }
 
-export default UserPage
+export default UserPage;
