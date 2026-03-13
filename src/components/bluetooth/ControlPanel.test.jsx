@@ -16,7 +16,7 @@ describe("ControlPanel", () => {
     );
 
     expect(screen.getByRole("button", { name: "發送 MSG" })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "發送 1" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "閃1次" })).toBeDisabled();
   });
 
   it("enables quick command buttons when allowed", () => {
@@ -31,6 +31,6 @@ describe("ControlPanel", () => {
       />,
     );
 
-    expect(screen.getByRole("button", { name: "發送 1" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "閃1次" })).toBeEnabled();
   });
 });

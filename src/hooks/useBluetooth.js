@@ -6,7 +6,7 @@ function useBluetooth() {
   const context = useBluetoothContext()
   const connectedDevices = context.devices.filter((device) => device.connected)
   const selectedDevices = connectedDevices.filter((device) => device.selected)
-  const controlEnabled = canControlDevices(context.devices, context.mode)
+  const controlEnabled = canControlDevices(context.devices)
 
   async function sendTextMessage(message) {
     if (!validateMessageInput(message)) {

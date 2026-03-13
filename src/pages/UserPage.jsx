@@ -71,7 +71,7 @@ function UserPage() {
   return (
     <PageLayout
       mode={APP_MODES.USER}
-      subtitle="首頁預設為使用者模式，所有裝置都驗證成功後才會開放控制。"
+      subtitle="首頁預設為使用者模式，會送出 USER 驗證請求，所有裝置驗證成功後才會開放控制。"
       title="MAHOTOON"
     >
       <div className="hero-card">

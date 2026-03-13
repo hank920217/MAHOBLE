@@ -28,8 +28,6 @@ export function formatAuthStatus(status, authenticated) {
       return '需重新驗證'
     case AUTH_RESPONSES.TIMEOUT:
       return '驗證逾時'
-    case AUTH_RESPONSES.SKIPPED:
-      return '管理者免驗證'
     case AUTH_RESPONSES.CANCELLED:
       return '已取消驗證'
     default:

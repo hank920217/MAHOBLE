@@ -14,13 +14,18 @@ export const DEFAULT_ADMIN_PASSWORD = '1234'
 export const APP_CACHE_NAME = 'maho-bluetooth-cache-v1'
 
 export const AUTH_RESPONSES = {
-  OK: 'AUTH_OK',
+  OK_USER: 'AUTH_OK_USER',
+  OK_ADMIN: 'AUTH_OK_ADMIN',
   FAIL: 'AUTH_FAIL',
   REQUIRED: 'AUTH_REQUIRED',
   PENDING: 'PENDING',
   TIMEOUT: 'TIMEOUT',
-  SKIPPED: 'SKIPPED',
   CANCELLED: 'CANCELLED',
+}
+
+export const AUTH_ROLE_LABELS = {
+  [APP_MODES.USER]: 'USER',
+  [APP_MODES.ADMIN]: 'ADMIN',
 }
 
 export const COMMAND_LEVELS = [1, 2, 3]

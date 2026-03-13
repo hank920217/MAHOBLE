@@ -99,12 +99,11 @@ export function BluetoothProvider({ children }) {
       const nextDevice = {
         ...connection,
         connected: true,
-        authenticated: targetMode === APP_MODES.ADMIN,
+        authenticated: false,
         role: targetMode,
         selected: true,
         lastResponseTime: new Date().toISOString(),
-        lastAuthStatus:
-          targetMode === APP_MODES.ADMIN ? AUTH_RESPONSES.SKIPPED : AUTH_RESPONSES.REQUIRED,
+        lastAuthStatus: AUTH_RESPONSES.REQUIRED,
       }
 
       setDevices((currentDevices) => {

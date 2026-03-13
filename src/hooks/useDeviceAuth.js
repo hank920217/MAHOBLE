@@ -3,8 +3,12 @@ import { createAuthMessage } from '../services/messageService.js'
 import useBluetooth from './useBluetooth.js'
 import useLogs from './useLogs.js'
 import useModal from './useModal.js'
-import { AUTH_RESPONSES, AUTH_TIMEOUT_MS } from '../utils/constants.js'
+import { APP_MODES, AUTH_RESPONSES, AUTH_TIMEOUT_MS } from '../utils/constants.js'
 import { validateVerificationCode } from '../utils/validators.js'
+
+function getExpectedAuthResponse(role) {
+  return role === APP_MODES.ADMIN ? AUTH_RESPONSES.OK_ADMIN : AUTH_RESPONSES.OK_USER
+}
 
 function useDeviceAuth() {
   const { devices, subscribeToNotifications, updateDevice, writeToDevice } = useBluetooth()
@@ -20,7 +24,8 @@ function useDeviceAuth() {
       }
 
       const isAuthMessage = [
-        AUTH_RESPONSES.OK,
+        AUTH_RESPONSES.OK_USER,
+        AUTH_RESPONSES.OK_ADMIN,
         AUTH_RESPONSES.FAIL,
         AUTH_RESPONSES.REQUIRED,
       ].includes(payload.message)
@@ -32,9 +37,10 @@ function useDeviceAuth() {
       clearTimeout(pendingRequest.timeoutId)
       pendingRequestsRef.current.delete(payload.deviceId)
 
-      const authenticated = payload.message === AUTH_RESPONSES.OK
+      const authenticated = payload.message === getExpectedAuthResponse(pendingRequest.role)
       updateDevice(payload.deviceId, {
         authenticated,
+        role: pendingRequest.role,
         lastAuthStatus: payload.message,
         lastResponseTime: new Date().toISOString(),
       })
@@ -91,7 +97,7 @@ function useDeviceAuth() {
         isSubmitting: true,
       })
 
-      addLog(`送出驗證碼 ${createAuthMessage(trimmedCode)}`, deviceRecord.name)
+      addLog(`送出驗證碼 ${createAuthMessage(deviceRecord.role, trimmedCode)}`, deviceRecord.name)
 
       const timeoutId = window.setTimeout(() => {
         pendingRequestsRef.current.delete(deviceId)
@@ -106,10 +112,16 @@ function useDeviceAuth() {
         })
       }, AUTH_TIMEOUT_MS)
 
-      pendingRequestsRef.current.set(deviceId, { timeoutId })
+      pendingRequestsRef.current.set(deviceId, {
+        timeoutId,
+        role: deviceRecord.role ?? APP_MODES.USER,
+      })
 
       try {
-        await writeToDevice(deviceId, createAuthMessage(trimmedCode))
+        await writeToDevice(
+          deviceId,
+          createAuthMessage(deviceRecord.role ?? APP_MODES.USER, trimmedCode),
+        )
       } catch (error) {
         clearTimeout(timeoutId)
         pendingRequestsRef.current.delete(deviceId)
@@ -127,7 +139,9 @@ function useDeviceAuth() {
 
     const result = await openInput({
       title: `驗證 ${deviceRecord.name}`,
-      message: '請輸入這台裝置的驗證碼。',
+      message: `請輸入這台裝置的${
+        deviceRecord.role === APP_MODES.ADMIN ? '管理者' : '使用者'
+      }驗證碼。`,
       placeholder: '例如：1234',
       confirmText: '確定',
       errorMessage: '',

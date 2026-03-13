@@ -23,7 +23,7 @@ describe('formatters and validators', () => {
       { connected: true, authenticated: true, selected: true },
     ]
 
-    expect(canControlDevices(devices, APP_MODES.USER)).toBe(false)
-    expect(canControlDevices(devices, APP_MODES.ADMIN)).toBe(true)
+    expect(canControlDevices(devices)).toBe(false)
+    expect(canControlDevices(devices.map((device) => ({ ...device, authenticated: true })))).toBe(true)
   })
 })

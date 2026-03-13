@@ -1,7 +1,13 @@
 import { describe, expect, it, vi } from 'vitest'
-import { sendPayloadToDevices } from './messageService.js'
+import { createAuthMessage, sendPayloadToDevices } from './messageService.js'
+import { APP_MODES } from '../utils/constants.js'
 
 describe('messageService', () => {
+  it('formats auth message with role and code', () => {
+    expect(createAuthMessage(APP_MODES.USER, ' 1234 ')).toBe('AUTH:USER:1234')
+    expect(createAuthMessage(APP_MODES.ADMIN, '9999')).toBe('AUTH:ADMIN:9999')
+  })
+
   it('keeps broadcasting when one device fails', async () => {
     const writer = vi
       .fn()

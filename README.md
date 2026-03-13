@@ -62,13 +62,13 @@ npm run lint
 - 裝置篩選條件為 `namePrefix: "maho"`。
 - Service UUID：`000000ff-0000-1000-8000-00805f9b34fb`
 - Characteristic UUID：`0000ff01-0000-1000-8000-00805f9b34fb`
-- 目前前端假設 ESP32 會透過同一 characteristic notification 回傳 `AUTH_OK`、`AUTH_FAIL`、`AUTH_REQUIRED`。
+- 目前前端假設 ESP32 會透過同一 characteristic notification 回傳 `AUTH_OK_USER`、`AUTH_OK_ADMIN`、`AUTH_FAIL`、`AUTH_REQUIRED`。
 
 ## 使用者模式
 
 - 首頁 `#/` 預設為使用者模式。
 - 新裝置連線後會立即要求輸入驗證碼。
-- 驗證命令格式為 `AUTH:xxxx`。
+- 驗證命令格式為 `AUTH:USER:xxxx`。
 - 只有全部已連線裝置都驗證成功時，才開放批次控制。
 - 支援文字訊息 `MSG:Hello` 與快捷命令 `CMD:FLASH:1~3`。
 
@@ -79,7 +79,7 @@ npm run lint
 - 帳號：`admin`
 - 密碼：`1234`
 - 登入狀態會保存於 `sessionStorage`。
-- 管理者模式連線後不需再次驗證即可控制裝置。
+- 管理者模式連線後會送出 `AUTH:ADMIN:xxxx`，並在收到 `AUTH_OK_ADMIN` 後開放控制。
 
 ## PWA 說明
 

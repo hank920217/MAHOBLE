@@ -6,6 +6,7 @@ import PageLayout from "../components/layout/PageLayout.jsx";
 import StatusBar from "../components/layout/StatusBar.jsx";
 import LogPanel from "../components/log/LogPanel.jsx";
 import useBluetooth from "../hooks/useBluetooth.js";
+import useDeviceAuth from "../hooks/useDeviceAuth.js";
 import useLogs from "../hooks/useLogs.js";
 import useModal from "../hooks/useModal.js";
 import { APP_MODES } from "../utils/constants.js";
@@ -14,6 +15,7 @@ import { formatRoleMode } from "../utils/formatters.js";
 function AdminPage() {
   const [isSending, setIsSending] = useState(false);
   const bluetooth = useBluetooth();
+  const { requestAuthentication } = useDeviceAuth();
   const { logs, clearLogs } = useLogs();
   const { openAlert } = useModal();
 
@@ -23,7 +25,11 @@ function AdminPage() {
 
   async function handleConnect() {
     try {
-      await bluetooth.connectDevice(APP_MODES.ADMIN);
+      const device = await bluetooth.connectDevice(APP_MODES.ADMIN);
+
+      if (device) {
+        await requestAuthentication(device);
+      }
     } catch (error) {
       await openAlert({
         title: "連線失敗",
@@ -65,14 +71,14 @@ function AdminPage() {
   return (
     <PageLayout
       mode={APP_MODES.ADMIN}
-      subtitle="管理者模式會略過驗證碼流程，但仍需先完成藍牙連線。"
+      subtitle="管理者模式會送出 ADMIN 驗證請求，裝置回傳 AUTH_OK_ADMIN 後才開放控制。"
       title="ESP32 管理者控制台"
     >
       <div className="hero-card hero-card--admin">
         <div>
           <p className="eyebrow">Admin Mode</p>
           <h2>管理者模式控制台</h2>
-          <p>可直接操作已連線裝置，並保留未來擴充的管理功能區塊。</p>
+          <p>支援管理者驗證、裝置控制與後續管理功能擴充。</p>
         </div>
         <ConnectButton
           disabled={!bluetooth.isSupported}
@@ -102,10 +108,10 @@ function AdminPage() {
             onSendMessage={handleSendMessage}
           />
           <DeviceList
-            allowReauth={false}
+            allowReauth
             devices={bluetooth.connectedDevices}
             onDisconnect={bluetooth.disconnectDevice}
-            onReauthenticate={() => {}}
+            onReauthenticate={requestAuthentication}
             onToggleSelected={bluetooth.toggleDeviceSelection}
           />
           <section className="panel admin-extension-panel">

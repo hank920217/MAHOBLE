@@ -1,5 +1,8 @@
-export function createAuthMessage(code) {
-  return `AUTH:${code.trim()}`
+import { APP_MODES, AUTH_ROLE_LABELS } from '../utils/constants.js'
+
+export function createAuthMessage(role, code) {
+  const normalizedRole = AUTH_ROLE_LABELS[role] ?? AUTH_ROLE_LABELS[APP_MODES.USER]
+  return `AUTH:${normalizedRole}:${code.trim()}`
 }
 
 export function createTextMessage(message) {
